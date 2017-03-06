@@ -60,6 +60,93 @@ function getLatLng(lat, lng) {
     return new google.maps.LatLng(lat, lng);
 };
 
+
+///////////////////// instagram API functions
+
+/**
+ * function 1: get request to instagram, passing in the lat lng data
+ *   looks like locations/search is the endpoint i want
+ *
+ */
+
+// https://api.instagram.com/v1/locations/search?lat=48.858844&lng=2.294351&access_token=ACCESS-TOKEN
+// function locationsSearch() {
+//   $.get("https://api.instagram.com/v1/media/search?lat=41.8&lng=-87.64999999999998&access_token=ACCESS-TOKEN", function(data) {
+//     console.log('hello from locationsSearch!')
+//     $("result").html(data);
+//     alert('load was performed!');
+//   });
+
+//   var client_id='064f3d3936174f4397539e0d5953f9aa'
+//   var redirect_uri='http://localhost:3000/callback'
+//   var response_type='code'
+
+//   var url = "https://api.instagram.com/v1/media/search"
+//   var data
+//   var dataType = 'json'
+//   var lat = 41.8
+//   var lng = 87.64999999999998
+//   $.ajax({
+//     url: "https://api.instagram.com/v1/media/search",
+//     dataType: dataType
+//   })
+// }
+
+// var client_id = '064f3d3936174f4397539e0d5953f9aa';
+// var redirect_uri = 'http://catstagram.ngrok.io/callback';
+// var response_type = 'code';
+// $.ajaxSetup({ dataType: "jsonp" });
+
+// function instagramAuth2() {
+
+// }
+
+function instagramAuth() {
+  $.ajax({
+    type: 'GET',
+    url: 'https://api.instagram.com/oauth/authorize?client_id=064f3d3936174f4397539e0d5953f9aa&redirect_uri=http://catstagram.ngrok.io/callback&response_type=code',
+    // accepts: {
+    //   'text/html': 'application/jsonp'
+    // },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+    //   'Content-Type': 'application/json;charset=UTF-8'
+    //   // 'callback':''
+    },
+    dataType: 'jsonp',
+    error: function() {
+      alert('error');
+    },
+    success: function(result) {
+      console.log(result)
+      alert('instagramAuth success!!!')
+    }
+  }).done(function(msg) {
+    console.log('hello from done!!!' + msg)
+  })
+}
+  // $.get("https://api.instagram.com/oauth/authorize?client_id=064f3d3936174f4397539e0d5953f9aa&redirect_uri=http://localhost:3000/callback&response_type=code", function(data) {
+  //   console.log('hello from instagramAuth!')
+  //   $("result").html(data);
+  //   alert('load was performed!');
+  // })
+
+/**
+ * function 2: take response from instagram,
+ *   probably parse json
+ *   render images from urls
+ *
+ *
+ */
+
+
+
+
+
+
+
+
 var map;
 
 
@@ -81,6 +168,7 @@ function initialize() {
    * Binds click event to given map and invokes a callback that appends a new marker to clicked location.
    */
   var addMarker = google.maps.event.addListener(map, 'click', function(e) {
+      instagramAuth()
       var lat = e.latLng.lat(); // lat of clicked point
       var lng = e.latLng.lng(); // lng of clicked point
       console.log("latitude: ", lat)

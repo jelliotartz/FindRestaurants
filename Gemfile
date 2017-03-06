@@ -40,6 +40,8 @@ gem 'gmaps4rails'
 gem 'geocoder'
 gem 'underscore-rails'
 gem 'slim-rails'
+gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-jsonp'
 
 group :development, :test do
   # Manage application processes
