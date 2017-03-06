@@ -42,6 +42,7 @@ gem 'underscore-rails'
 gem 'slim-rails'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-jsonp'
+gem 'httparty'
 
 group :development, :test do
   # Manage application processes

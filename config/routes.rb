@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   get 'pages/home' => 'high_voltage/pages#show', id: 'home'
 
   get '/callback' => 'high_voltage/pages#show', id: 'home'
+  # get '/callback' => 'cat_images#show'
 end
