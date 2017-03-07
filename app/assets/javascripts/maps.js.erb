@@ -60,7 +60,7 @@ function getLatLng(lat, lng) {
     return new google.maps.LatLng(lat, lng);
 };
 
-function findMyDinner(lat, lng) {
+function findRestaurants(lat, lng) {
   $.ajax({
     type: 'GET',
     url: `https://api.foursquare.com/v2/venues/search?ll=${lat},${lng}&client_id=<%=ENV['CLIENT_ID']%>&client_secret=<%=ENV['FOURSQUARE_CLIENT_SECRET']%>&v=20170101`,
@@ -69,6 +69,7 @@ function findMyDinner(lat, lng) {
     },
     success: function(result) {
       venues = result.response.venues;
+      // filter venues to only contain restaurants and bars
       var foodVenues = venues.filter(function(venue){
         var categories = venue.categories
         var categoryNames = categories.map(category => category.name)
@@ -90,6 +91,7 @@ function findMyDinner(lat, lng) {
   })
 }
 
+// https://github.com/NouranMahmoud/GoogleMapTut/blob/master/app/assets/javascripts/map/gmap.js
 function initialize() {
   var mapOptions = {
     center: new google.maps.LatLng(41.903426915508625, -87.6478099822998),
@@ -99,19 +101,21 @@ function initialize() {
     scaleControl: false,
     streetViewControl: true,
     overviewMapControl: true,
+    // custom map styles from snazzy maps https://snazzymaps.com
     styles: [{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"on"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"gamma":"3.24"},{"hue":"#009aff"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f1f8fe"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"},{"hue":"#009aff"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#b2dff2"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"}]}]
   };
 
-  // initializing map
+  // Initialize map
   var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
   /**
    * Binds click event to given map and invokes a callback that appends a new marker to clicked location.
+   * http://jsfiddle.net/fatihacet/CKegk/
    */
   var addMarker = google.maps.event.addListener(map, 'click', function(e) {
       var lat = e.latLng.lat(); // lat of clicked point
       var lng = e.latLng.lng(); // lng of clicked point
-      findMyDinner(lat, lng)
+      findRestaurants(lat, lng)
       console.log("latitude: ", lat)
       console.log("longitude: ", lng)
       var markerId = getMarkerUniqueId(lat, lng); // an that will be used to cache this marker in markers object.
