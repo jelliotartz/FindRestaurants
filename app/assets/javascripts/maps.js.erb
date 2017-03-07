@@ -69,32 +69,26 @@ function findMyDinner(lat, lng) {
     },
     success: function(result) {
       venues = result.response.venues;
-      console.log(venues)
-      venues.forEach(function(venue) {
-        var mayor = venue.mayor || "no mayor";
-        var mayorDiv = (venue.mayor) ? "<div class='mayor'>" + "Mayor: " + venue.mayor + "</div>" : "";
-        var addressDiv = (venue.location.address) ? "<div class='address'>" + venue.location.address + "</div>" : "";
+      var foodVenues = venues.filter(function(venue){
+        var categories = venue.categories
+        var categoryNames = categories.map(category => category.name)
+        // if any of the category names match bar or restaurant, return true
+        if (categoryNames.find(name => name.match(/Bar|Restaurant|bar|restaurant/))) {
+          return true
+        }
+      })
+      foodVenues.forEach(function(venue) {
+        var nameDiv = "<div>" + "Name: " + venue.name + "</div>"
+        var addressDiv = (venue.location.address) ? "<div>" + "Address: " + venue.location.address + "</div>" : "";
         $('#map-container').append("<div class='venue'>" +
-          "<div class='name'>" +
-          venue.name +
-          "</div>" +
+            nameDiv +
             addressDiv +
-            mayorDiv +
           "</div>"
         )
-
       });
     }
-  }).done(function(msg) {
-    // console.log(msg)
   })
 }
-
-
-
-
-var map;
-
 
 function initialize() {
   var mapOptions = {
@@ -109,7 +103,7 @@ function initialize() {
   };
 
   // initializing map
-  map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+  var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
   /**
    * Binds click event to given map and invokes a callback that appends a new marker to clicked location.
