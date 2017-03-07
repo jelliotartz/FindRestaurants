@@ -40,7 +40,6 @@ gem 'high_voltage', '~> 3.0.0'
 gem 'gmaps4rails'
 gem 'geocoder'
 gem 'underscore-rails'
-gem 'slim-rails'
 
 group :development, :test do
   # Manage application processes
