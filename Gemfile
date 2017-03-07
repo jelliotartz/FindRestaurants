@@ -35,14 +35,12 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'high_voltage', '~> 3.0.0'
 gem 'gmaps4rails'
 gem 'geocoder'
 gem 'underscore-rails'
 gem 'slim-rails'
-gem 'rack-cors', :require => 'rack/cors'
-gem 'rack-jsonp'
-gem 'httparty'
 
 group :development, :test do
   # Manage application processes

@@ -7,7 +7,7 @@ function loadScript() {
   console.log("map loading ...");
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src = 'http://maps.google.com/maps/api/js?key=AIzaSyD0vLLVcuHehTqPMNlV035V_8xo6EyfQOY' +
+  script.src = `http://maps.google.com/maps/api/js?key=<%=ENV['GOOGLE_MAPS_API_KEY']%>` +
     '&libraries=drawing' +
     '&callback=initialize';
   document.body.appendChild(script);
@@ -60,6 +60,36 @@ function getLatLng(lat, lng) {
     return new google.maps.LatLng(lat, lng);
 };
 
+function findMyDinner(lat, lng) {
+  $.ajax({
+    type: 'GET',
+    url: `https://api.foursquare.com/v2/venues/search?ll=${lat},${lng}&client_id=<%=ENV['CLIENT_ID']%>&client_secret=<%=ENV['FOURSQUARE_CLIENT_SECRET']%>&v=20170101`,
+    error: function() {
+      alert('error');
+    },
+    success: function(result) {
+      venues = result.response.venues;
+      console.log(venues)
+      venues.forEach(function(venue) {
+        var mayor = venue.mayor || "no mayor";
+        var mayorDiv = (venue.mayor) ? "<div class='mayor'>" + "Mayor: " + venue.mayor + "</div>" : "";
+        var addressDiv = (venue.location.address) ? "<div class='address'>" + venue.location.address + "</div>" : "";
+        $('#map-container').append("<div class='venue'>" +
+          "<div class='name'>" +
+          venue.name +
+          "</div>" +
+            addressDiv +
+            mayorDiv +
+          "</div>"
+        )
+
+      });
+    }
+  }).done(function(msg) {
+    // console.log(msg)
+  })
+}
+
 
 
 
@@ -68,13 +98,14 @@ var map;
 
 function initialize() {
   var mapOptions = {
-    center: new google.maps.LatLng(41.8, -87.64999999999998),
-    zoom: 8,
+    center: new google.maps.LatLng(41.903426915508625, -87.6478099822998),
+    zoom: 14,
     mapTypeId: google.maps.MapTypeId.NORMAL,
     panControl: true,
     scaleControl: false,
     streetViewControl: true,
-    overviewMapControl: true
+    overviewMapControl: true,
+    styles: [{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"on"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"gamma":"3.24"},{"hue":"#009aff"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f1f8fe"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"},{"hue":"#009aff"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#b2dff2"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"}]}]
   };
 
   // initializing map
@@ -86,6 +117,7 @@ function initialize() {
   var addMarker = google.maps.event.addListener(map, 'click', function(e) {
       var lat = e.latLng.lat(); // lat of clicked point
       var lng = e.latLng.lng(); // lng of clicked point
+      findMyDinner(lat, lng)
       console.log("latitude: ", lat)
       console.log("longitude: ", lng)
       var markerId = getMarkerUniqueId(lat, lng); // an that will be used to cache this marker in markers object.
