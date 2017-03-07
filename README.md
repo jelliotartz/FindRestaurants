@@ -1,24 +1,9 @@
-# README
+# Restaurant Finder
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Simple app that lets you find restaurants and bars in your vicinity using the [Google Maps](https://developers.google.com/maps/) and [Foursquare](https://developer.foursquare.com/) APIs.
 
-Things you may want to cover:
+![Screenshot](app/assets/images/restaurant-finder.png)
 
-* Ruby version
+## Reflections
 
-* System dependencies
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
