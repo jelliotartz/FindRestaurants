@@ -23,6 +23,5 @@ I found it interesting to contrast the ease of implementation of Foursquare's AP
 I used Thoughtbot's [High Voltage](https://github.com/thoughtbot/high_voltage) gem to render the static homepage. Although the small scale of this project doesn't really showcase the benefits of this gem particularly well, it was nice to get a little experience with its routing syntax.
 
 
-Thank you for the opportunity to demonstrate my work with this project! I'm looking forward to discussing it with your team!
-
-
+### Custom Map Styles
+I added custom styles to my map with [Snazzy Maps](https://snazzymaps.com).
